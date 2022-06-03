@@ -12,7 +12,10 @@ import (
 	"time"
 )
 
-func JwtVerifyAccess() echo.MiddlewareFunc {
+func JwtVerifyAccess(role string) echo.MiddlewareFunc {
+	if role == "" {
+		role = "member"
+	}
 	return middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: []byte(config.Get().JwtSecretKey),
 		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
@@ -45,6 +48,10 @@ func JwtVerifyAccess() echo.MiddlewareFunc {
 				log.Err(errors.New("invalid token")).Msgf("invalid token: %v", token.Raw)
 				return nil, errors.New("invalid token")
 			}
+			if token.Claims.(jwt.MapClaims)["role"] != role {
+				log.Err(errors.New("invalid token role")).Msgf("invalid token role: %v", token.Raw)
+				return nil, errors.New("invalid token role")
+			}
 			//Send User Auth To Context
 			c.Set("user_id", token.Claims.(jwt.MapClaims)["id"])
 			return token, nil
@@ -52,7 +59,10 @@ func JwtVerifyAccess() echo.MiddlewareFunc {
 	})
 }
 
-func JwtVerifyRefresh() echo.MiddlewareFunc {
+func JwtVerifyRefresh(role string) echo.MiddlewareFunc {
+	if role == "" {
+		role = "member"
+	}
 	return middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: []byte(config.Get().JwtSecretKey),
 		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
@@ -86,6 +96,10 @@ func JwtVerifyRefresh() echo.MiddlewareFunc {
 				log.Err(errors.New("invalid token")).Msgf("invalid token: %v", token.Raw)
 				return nil, errors.New("invalid token")
 			}
+			if token.Claims.(jwt.MapClaims)["role"] != role {
+				log.Err(errors.New("invalid token role")).Msgf("invalid token role: %v", token.Raw)
+				return nil, errors.New("invalid token role")
+			}
 			//Send User ID To Context
 			c.Set("user_id", token.Claims.(jwt.MapClaims)["id"])
 
@@ -93,40 +107,3 @@ func JwtVerifyRefresh() echo.MiddlewareFunc {
 		},
 	})
 }
-
-//func JwtVerifyRefresh(next echo.HandlerFunc) echo.HandlerFunc {
-//	return func(c echo.Context) error {
-//		if err := next(c); err != nil {
-//			c.Error(err)
-//		}
-//		member := c.Get("member").(*jwt.Token)
-//		claims := member.Claims.(jwt.MapClaims)
-//		tokenType := claims["token_type"].(string)
-//		id := claims["id"].(string)
-//		rawExp := claims["exp"].(float64)
-//		exp := int64(rawExp)
-//
-//		if _, ok := member.Method.(*jwt.SigningMethodRSA); !ok {
-//			log.Err(errors.New("unexpected signing method")).Msgf("unexpected signing method: %v", member.Header["alg"])
-//			response.Err(c, errors.New("unexpected signing method"))
-//			return errors.New("unexpected signing method")
-//		} else if tokenType != "refresh_token" {
-//			log.Err(errors.New("unexpected token type")).Msgf("unexpected signing method: %v", tokenType)
-//			response.Err(c, errors.New("unexpected token type"))
-//			return errors.New("unexpected token type")
-//		} else if !member.Valid {
-//			log.Err(errors.New("token is not valid")).Msgf("token is not valid: %v", member.Raw)
-//			response.Err(c, errors.New("token is not valid"))
-//			return errors.New("token is not valid")
-//		} else if id == "" {
-//			log.Err(errors.New("member not found")).Msgf("member not found: %v", id)
-//			response.Err(c, errors.New("member not found"))
-//			return errors.New("member not found")
-//		} else if exp < time.Now().Unix() {
-//			log.Err(errors.New("token expired")).Msgf("token expired: %v", id)
-//			response.Err(c, errors.New("token expired"))
-//			return errors.New("token expired")
-//		}
-//		return next(c)
-//	}
-//}

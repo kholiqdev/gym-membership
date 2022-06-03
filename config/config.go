@@ -19,7 +19,7 @@ type Config struct {
 	DBDriver   string `mapstructure:"DB_DRIVER,default=mysql"`
 	DBHost     string `mapstructure:"DB_HOST,default=127.0.0.1"`
 	DBPort     string `mapstructure:"DB_PORT,default=3306"`
-	DBName     string `mapstructure:"DB_NAME,default=alta_code_structuring"`
+	DBName     string `mapstructure:"DB_NAME,default=gym"`
 	DBUser     string `mapstructure:"DB_USER,default=root"`
 	DBPassword string `mapstructure:"DB_PASSWORD,default="`
 
@@ -30,7 +30,7 @@ type Config struct {
 	TestDBDriver   string `mapstructure:"TEST_DB_DRIVER,default=mysql"`
 	TestDBHost     string `mapstructure:"TEST_DB_HOST,default=127.0.0.1"`
 	TestDBPort     string `mapstructure:"TEST_DB_PORT,default=3306"`
-	TestDBName     string `mapstructure:"TEST_DB_NAME,default=alta_code_structuring_test"`
+	TestDBName     string `mapstructure:"TEST_DB_NAME,default=gym_test"`
 	TestDBUser     string `mapstructure:"TEST_DB_USER,default=root"`
 	TestDBPassword string `mapstructure:"TEST_DB_PASSWORD,default="`
 

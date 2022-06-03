@@ -7,11 +7,9 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	_adminEntity "gym/cmd/domain/admin/entity"
+	_classEntity "gym/cmd/domain/class/entity"
+	_classBookingEntity "gym/cmd/domain/class_booking/entity"
 	_memberEntity "gym/cmd/domain/member/entity"
-	_offlineClassEntity "gym/cmd/domain/offline_class/entity"
-	_offlineClassBookingEntity "gym/cmd/domain/offline_class_booking/entity"
-	_onlineClassEntity "gym/cmd/domain/online_class/entity"
-	_onlineClassBookingEntity "gym/cmd/domain/online_class_booking/entity"
 	_trainerEntity "gym/cmd/domain/trainer/entity"
 	"gym/config"
 )
@@ -108,12 +106,11 @@ func initMigrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&_adminEntity.Admin{},
 		&_memberEntity.Member{},
+		&_memberEntity.MemberType{},
+		&_memberEntity.MemberOrder{},
 		&_trainerEntity.Trainer{},
-		&_offlineClassEntity.OfflineClass{},
-		&_onlineClassEntity.OnlineClass{},
-		&_offlineClassBookingEntity.OfflineClassBooking{},
-		&_offlineClassBookingEntity.OfflineClassBookingDetail{},
-		&_onlineClassBookingEntity.OnlineClassBooking{},
-		&_onlineClassBookingEntity.OnlineClassBookingDetail{},
+		&_classEntity.Class{},
+		&_classBookingEntity.ClassBooking{},
+		&_classBookingEntity.ClassBookingDetail{},
 	)
 }

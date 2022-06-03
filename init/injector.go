@@ -6,6 +6,7 @@ package main
 import (
 	"github.com/google/wire"
 	"gym/cmd/interface/handler"
+	"gym/cmd/interface/handler/admin"
 	"gym/cmd/interface/handler/health"
 	"gym/cmd/interface/handler/member"
 	"gym/config"
@@ -42,6 +43,7 @@ func InitHttpProtocol(mode string) (*http.HttpImpl, error) {
 			handler.NewHttpHandler,
 		),
 		member.ProviderSet,
+		admin.ProviderSet,
 		health.ProviderSet,
 	))
 }
