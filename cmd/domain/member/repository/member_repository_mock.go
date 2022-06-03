@@ -10,6 +10,11 @@ type MemberRepositoryMock struct {
 	Mock mock.Mock
 }
 
+func (r *MemberRepositoryMock) InsertMemberType(member *entity.MemberType) (*entity.MemberType, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (r *MemberRepositoryMock) FindAll() (*entity.MemberList, error) {
 	arguments := r.Mock.Called()
 	if arguments.Get(0) == nil {

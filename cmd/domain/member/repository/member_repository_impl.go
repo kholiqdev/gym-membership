@@ -56,3 +56,10 @@ func (r *MemberRepositoryImpl) Insert(member *entity.Member) (*entity.Member, er
 	}
 	return member, nil
 }
+
+func (r *MemberRepositoryImpl) InsertMemberType(member *entity.MemberType) (*entity.MemberType, error) {
+	if e := r.Db.Debug().Create(&member).Error; e != nil {
+		return nil, e
+	}
+	return member, nil
+}

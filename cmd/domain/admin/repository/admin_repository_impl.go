@@ -30,6 +30,7 @@ func (r AdminRepositoryImpl) Find(adminId uint) (*entity.Admin, error) {
 	return &entity.Admin{
 		ID:       admin.ID,
 		Name:     admin.Name,
+		Phone:    admin.Phone,
 		Email:    admin.Email,
 		Password: admin.Password,
 	}, nil
@@ -45,6 +46,7 @@ func (r AdminRepositoryImpl) FindByEmail(email string) (*entity.Admin, error) {
 	return &entity.Admin{
 		ID:       admin.ID,
 		Name:     admin.Name,
+		Phone:    admin.Phone,
 		Email:    admin.Email,
 		Password: admin.Password,
 	}, nil

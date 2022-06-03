@@ -89,7 +89,7 @@ func (h MemberHandlerImpl) Login(ctx echo.Context) error {
 }
 
 func (h MemberHandlerImpl) Refresh(ctx echo.Context) error {
-	memberId := ctx.Get("member_id").(float64)
+	memberId := ctx.Get("user_id").(float64)
 
 	res, err := h.SvcMember.Refresh(uint(memberId))
 

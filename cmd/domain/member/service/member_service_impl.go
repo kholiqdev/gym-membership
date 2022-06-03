@@ -9,14 +9,12 @@ import (
 	"gym/internal/protocol/http/errors"
 	"gym/pkg/auth"
 	"gym/pkg/hash"
-	"sync"
 	"time"
 )
 
 type MemberServiceImpl struct {
 	RepoMember repository.MemberRepository
 	JwtAuth    auth.JwtToken
-	repoOnce   sync.Once
 }
 
 func (s MemberServiceImpl) GetMembers() (*dto.MemberListResponse, error) {
@@ -47,9 +45,10 @@ func (s MemberServiceImpl) Store(request *dto.MemberCreateRequest) (*dto.MemberR
 	}
 
 	memberRepo, err := s.RepoMember.Insert(&entity.Member{
-		Name:     request.Name,
-		Email:    request.Email,
-		Password: passwordHashed,
+		Name:         request.Name,
+		MemberTypeID: 1,
+		Email:        request.Email,
+		Password:     passwordHashed,
 	})
 
 	if err != nil {
@@ -79,6 +78,7 @@ func (s MemberServiceImpl) Login(request *dto.MemberLoginRequest) (*dto.MemberAu
 	accessToken := s.JwtAuth.Sign(jwt.MapClaims{
 		"id":   member.ID,
 		"name": member.Name,
+		"role": "member",
 		"exp":  time.Now().Add(time.Hour * 2).Unix(),
 	})
 
@@ -97,6 +97,7 @@ func (s MemberServiceImpl) Refresh(memberId uint) (*dto.MemberAuthResponse, erro
 	accessToken := s.JwtAuth.Sign(jwt.MapClaims{
 		"id":   member.ID,
 		"name": member.Name,
+		"role": "member",
 		"exp":  time.Now().Add(time.Hour * 2).Unix(),
 	})
 
