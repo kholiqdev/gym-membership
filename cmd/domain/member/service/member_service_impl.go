@@ -45,10 +45,9 @@ func (s MemberServiceImpl) Store(request *dto.MemberCreateRequest) (*dto.MemberR
 	}
 
 	memberRepo, err := s.RepoMember.Insert(&entity.Member{
-		Name:         request.Name,
-		MemberTypeID: 1,
-		Email:        request.Email,
-		Password:     passwordHashed,
+		Name:     request.Name,
+		Email:    request.Email,
+		Password: passwordHashed,
 	})
 
 	if err != nil {
@@ -59,6 +58,26 @@ func (s MemberServiceImpl) Store(request *dto.MemberCreateRequest) (*dto.MemberR
 	memberResp := dto.CreateMemberResponse(memberRepo)
 	log.Info().Msg("Successfully insert to to DB")
 	return &memberResp, nil
+}
+
+func (s MemberServiceImpl) StoreMemberType(request *dto.MemberTypeCreateRequest) (*dto.MemberTypeResponse, error) {
+
+	memberRepo, err := s.RepoMember.InsertMemberType(&entity.MemberType{
+		Name:        request.Name,
+		Description: request.Description,
+		Image:       request.Image,
+		Duration:    request.Duration,
+		Price:       request.Price,
+	})
+
+	if err != nil {
+		log.Err(err).Msg("Error insert member type to DB")
+		return nil, err
+	}
+
+	adminResp := dto.CreateMemberTypeResponse(memberRepo)
+	log.Info().Msg("Successfully insert to to DB")
+	return &adminResp, nil
 }
 
 func (s MemberServiceImpl) Login(request *dto.MemberLoginRequest) (*dto.MemberAuthResponse, error) {

@@ -7,7 +7,7 @@ import (
 
 type Member struct {
 	ID           uint `gorm:"primaryKey;autoIncrement;<-:create"`
-	MemberTypeID uint
+	MemberTypeID *uint
 	Name         string `gorm:"type:varchar(50) not null"`
 	Phone        string `gorm:"type:varchar(50) not null"`
 	Email        string `gorm:"type:varchar(50) unique;<-:create"`
