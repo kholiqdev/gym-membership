@@ -15,27 +15,27 @@ services:
     environment:
       - VIRTUAL_HOST=gym.stack.co.id
     restart: always
-    depends_on:
-      - mysql_db
+#    depends_on:
+#      - mysql_db
     networks:
       - rest_network
 
-  mysql_db:
-    container_name: database
-    build: dockerfiles/mysql
-    command: --default-authentication-plugin=mysql_native_password
-    ports:
-      - "3306"
-    env_file:
-      - dockerfiles/mysql/.env
-    volumes:
-      - database_mysql:/var/lib/mysql
-    networks:
-      - rest_network
+#  mysql_db:
+#    container_name: database
+#    build: dockerfiles/mysql
+#    command: --default-authentication-plugin=mysql_native_password
+#    ports:
+#      - "3306"
+#    env_file:
+#      - dockerfiles/mysql/.env
+#    volumes:
+#      - database_mysql:/var/lib/mysql
+#    networks:
+#      - rest_network
 
 volumes:
   api:
-  database_mysql:
+#  database_mysql:
 
 networks:
   rest_network:
