@@ -2,7 +2,7 @@ version: '3'
 services:
   api:
     container_name: api
-    image: kholiq/gotoko:1.0.0
+#    image: kholiq/gotoko:1.0.0
     build:
       context: ../..
       dockerfile: deployment/docker/dockerfiles/go/Dockerfile
@@ -11,7 +11,9 @@ services:
     volumes:
       - api:/app
     ports:
-      - "8181:8181"
+      - "80:8181"
+    environment:
+      - VIRTUAL_HOST=gym.stack.co.id
     restart: always
     depends_on:
       - mysql_db
@@ -38,3 +40,6 @@ volumes:
 networks:
   rest_network:
     driver: bridge
+  nginx_proxy:
+    external:
+      name: nginx_nginx-proxy
