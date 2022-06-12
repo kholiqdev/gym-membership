@@ -10,8 +10,6 @@ services:
     tty: true
     volumes:
       - api:/app
-    ports:
-      - "80:8181"
     environment:
       - VIRTUAL_HOST=gym.stack.co.id
     restart: always
@@ -19,6 +17,25 @@ services:
 #      - mysql_db
     networks:
       - rest_network
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build:
+      context: ../..
+      dockerfile: deployment/docker/dockerfiles/nginx/Dockerfile
+    volumes:
+      - api:/usr/src/app
+    expose:
+      - 80
+    environment:
+      - VIRTUAL_HOST=gym.stack.co.id
+    depends_on:
+      - api
+    networks:
+      - rest_network
+      - nginx_proxy
+
 
 #  mysql_db:
 #    container_name: database
