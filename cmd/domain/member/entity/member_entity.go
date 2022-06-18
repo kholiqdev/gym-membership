@@ -19,8 +19,8 @@ type Member struct {
 	DeletedAt gorm.DeletedAt
 
 	//Relations
-	MemberType  MemberType     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	MemberOrder []*MemberOrder `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	MemberType  MemberType    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	MemberOrder []*MemberJoin `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type MemberList []*Member
@@ -41,14 +41,20 @@ type MemberType struct {
 	Member []*Member `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
-type MemberOrder struct {
+type MemberJoin struct {
 	ID                 uint `gorm:"primaryKey;autoIncrement;<-:create"`
 	MemberID           uint
 	MemberTypeID       uint
+	StartAt            string  `gorm:"type:DATE NOT NULL"`
 	InvoiceNo          string  `gorm:"not null"`
+	MemberNik          string  `gorm:"not null"`
 	MemberName         string  `gorm:"not null"`
 	MemberEmail        string  `gorm:"not null"`
 	MemberPhone        string  `gorm:"not null"`
+	MemberGender       string  `gorm:"not null"`
+	MemberAddress      string  `gorm:"not null"`
+	MemberCity         string  `gorm:"not null"`
+	MemberPostalCode   string  `gorm:"not null"`
 	MemberTypeName     string  `gorm:"not null"`
 	MemberTypeImage    string  `gorm:"not null"`
 	MemberTypeDuration uint    `gorm:"not null"`

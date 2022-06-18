@@ -38,6 +38,27 @@ func CreateMemberTypeResponse(memberType *entity.MemberType) MemberTypeResponse 
 	}
 }
 
+func CreateMemberJoinResponse(memberJoin *entity.MemberJoin) MemberJoinResponse {
+	return MemberJoinResponse{
+		ID:                 memberJoin.ID,
+		InvoiceNo:          memberJoin.InvoiceNo,
+		StartAt:            memberJoin.StartAt,
+		MemberName:         memberJoin.MemberName,
+		MemberNik:          memberJoin.MemberNik,
+		MemberPhone:        memberJoin.MemberPhone,
+		MemberGender:       memberJoin.MemberGender,
+		MemberAddress:      memberJoin.MemberAddress,
+		MemberCity:         memberJoin.MemberCity,
+		MemberPostalCode:   memberJoin.MemberPostalCode,
+		MemberTypeName:     memberJoin.MemberTypeName,
+		MemberTypeDuration: memberJoin.MemberTypeDuration,
+		MemberTypePrice:    memberJoin.MemberTypePrice,
+		MemberTypeImage:    memberJoin.MemberTypeImage,
+		Status:             memberJoin.Status,
+		Total:              memberJoin.Total,
+	}
+}
+
 func CreateMemberAuthResponse(token dto.AccessToken) MemberAuthResponse {
 	return MemberAuthResponse{
 		Type:         token.Type,

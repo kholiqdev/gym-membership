@@ -45,6 +45,25 @@ func (h MemberHandlerImpl) Detail(ctx echo.Context) error {
 	return nil
 }
 
+func (h MemberHandlerImpl) Join(ctx echo.Context) error {
+	var memberDto dto.MemberJoinRequest
+
+	if err := ctx.Bind(&memberDto); err != nil {
+		response.Err(ctx, http.StatusBadRequest, err)
+		return err
+	}
+
+	memberJoin, err := h.SvcMember.StoreMemberJoin(ctx, &memberDto)
+
+	if err != nil {
+		response.Err(ctx, http.StatusBadRequest, err)
+		return err
+	}
+
+	response.Json(ctx, http.StatusCreated, "Success", memberJoin)
+	return nil
+}
+
 func (h MemberHandlerImpl) Create(ctx echo.Context) error {
 	var memberDto dto.MemberCreateRequest
 

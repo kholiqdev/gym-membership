@@ -30,6 +30,16 @@ func (r *MemberRepositoryImpl) Find(memberId uint) (*entity.Member, error) {
 	return &member, nil
 }
 
+func (r *MemberRepositoryImpl) FindMemberTypeById(memberTypeId uint) (*entity.MemberType, error) {
+	var memberType entity.MemberType
+
+	if e := r.Db.Debug().First(&memberType, memberTypeId).Error; e != nil {
+		return nil, e
+	}
+
+	return &memberType, nil
+}
+
 func (r *MemberRepositoryImpl) FindByEmail(email string) (*entity.Member, error) {
 	var member entity.Member
 
@@ -52,4 +62,11 @@ func (r *MemberRepositoryImpl) InsertMemberType(memberType *entity.MemberType) (
 		return nil, e
 	}
 	return memberType, nil
+}
+
+func (r *MemberRepositoryImpl) InsertMemberJoin(memberJoin *entity.MemberJoin) (*entity.MemberJoin, error) {
+	if e := r.Db.Debug().Create(&memberJoin).Error; e != nil {
+		return nil, e
+	}
+	return memberJoin, nil
 }

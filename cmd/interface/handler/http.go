@@ -58,6 +58,7 @@ func (h *HttpHandlerImpl) RegisterPath(e *echo.Echo) {
 	{
 		memberGroup.GET("", h.member.Get, auth.JwtVerifyAccess("member"))
 		memberGroup.GET("/:id", h.member.Detail)
+		memberGroup.POST("/join", h.member.Join, auth.JwtVerifyAccess("member"))
 	}
 
 	// Admin group

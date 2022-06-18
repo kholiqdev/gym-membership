@@ -14,7 +14,7 @@ type ClassResponse struct {
 	Date          string  `json:"date,omitempty"`
 	StartTime     string  `json:"start_time,omitempty"`
 	EndTime       string  `json:"end_time,omitempty"`
-	IsOffline     bool    `json:"is_offline,omitempty"`
+	IsOffline     bool    `json:"is_offline"`
 	CategoryName  string  `json:"category_name,omitempty"`
 
 	CreatedAt time.Time `json:"created_at,omitempty"`
