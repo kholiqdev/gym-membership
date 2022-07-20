@@ -6,6 +6,7 @@ import (
 
 type AdminHandler interface {
 	Get(ctx echo.Context) error
+	GetMember(ctx echo.Context) error
 	GetClassCategory(ctx echo.Context) error
 	Detail(ctx echo.Context) error
 	Create(ctx echo.Context) error

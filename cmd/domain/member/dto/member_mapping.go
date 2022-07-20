@@ -7,12 +7,13 @@ import (
 
 func CreateMemberResponse(member *entity.Member) MemberResponse {
 	return MemberResponse{
-		ID:        member.ID,
-		Name:      member.Name,
-		Phone:     member.Phone,
-		Email:     member.Email,
-		CreatedAt: member.CreatedAt,
-		UpdatedAt: member.UpdatedAt,
+		ID:         member.ID,
+		Name:       member.Name,
+		Phone:      member.Phone,
+		Email:      member.Email,
+		OrderCount: uint(len(member.MemberOrder)),
+		CreatedAt:  member.CreatedAt,
+		UpdatedAt:  member.UpdatedAt,
 	}
 }
 
@@ -59,10 +60,16 @@ func CreateMemberJoinResponse(memberJoin *entity.MemberJoin) MemberJoinResponse 
 	}
 }
 
-func CreateMemberAuthResponse(token dto.AccessToken) MemberAuthResponse {
+func CreateMemberAuthResponse(token dto.AccessToken, member *entity.Member) MemberAuthResponse {
 	return MemberAuthResponse{
 		Type:         token.Type,
 		Token:        token.Token,
 		RefreshToken: token.RefreshToken,
+		Member: MemberResponse{
+			ID:    member.ID,
+			Name:  member.Name,
+			Phone: member.Phone,
+			Email: member.Email,
+		},
 	}
 }

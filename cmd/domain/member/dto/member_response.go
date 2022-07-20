@@ -5,12 +5,13 @@ import (
 )
 
 type MemberResponse struct {
-	ID        uint      `json:"id,omitempty"`
-	Name      string    `json:"name,omitempty"`
-	Phone     string    `json:"phone,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	ID         uint      `json:"id,omitempty"`
+	Name       string    `json:"name,omitempty"`
+	Phone      string    `json:"phone,omitempty"`
+	Email      string    `json:"email,omitempty"`
+	OrderCount uint      `json:"order_count,omitempty"`
+	CreatedAt  time.Time `json:"created_at,omitempty"`
+	UpdatedAt  time.Time `json:"updated_at,omitempty"`
 }
 
 type MemberTypeResponse struct {
@@ -25,9 +26,10 @@ type MemberTypeResponse struct {
 }
 
 type MemberAuthResponse struct {
-	Type         string `json:"type,omitempty"`
-	Token        string `json:"token,omitempty"`
-	RefreshToken string `json:"refresh_token,omitempty"`
+	Type         string         `json:"type,omitempty"`
+	Token        string         `json:"token,omitempty"`
+	RefreshToken string         `json:"refresh_token,omitempty"`
+	Member       MemberResponse `json:"member,omitempty"`
 }
 
 type MemberJoinResponse struct {

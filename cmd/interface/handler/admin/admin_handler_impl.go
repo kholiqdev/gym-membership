@@ -37,6 +37,20 @@ func (h AdminHandlerImpl) Get(ctx echo.Context) error {
 	return nil
 }
 
+func (h AdminHandlerImpl) GetMember(ctx echo.Context) error {
+	members, err := h.SvcMember.GetMembers()
+
+	if err != nil {
+		response.Err(ctx, http.StatusBadRequest, err)
+		return err
+	}
+
+	response.Json(ctx, http.StatusOK, "Success", map[string]interface{}{
+		"members": members,
+	})
+	return nil
+}
+
 func (h AdminHandlerImpl) GetClassCategory(ctx echo.Context) error {
 	pagination := database.NewPagination(ctx)
 	classCategory, err := h.SvcClassCategory.GetAll(ctx, pagination)

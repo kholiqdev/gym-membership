@@ -145,7 +145,7 @@ func (s MemberServiceImpl) Login(request *dto.MemberLoginRequest) (*dto.MemberAu
 		"exp":  time.Now().Add(time.Hour * 2).Unix(),
 	})
 
-	authResp := dto.CreateMemberAuthResponse(accessToken)
+	authResp := dto.CreateMemberAuthResponse(accessToken, member)
 
 	return &authResp, nil
 }
@@ -164,7 +164,7 @@ func (s MemberServiceImpl) Refresh(memberId uint) (*dto.MemberAuthResponse, erro
 		"exp":  time.Now().Add(time.Hour * 2).Unix(),
 	})
 
-	authResp := dto.CreateMemberAuthResponse(accessToken)
+	authResp := dto.CreateMemberAuthResponse(accessToken, member)
 
 	return &authResp, nil
 }

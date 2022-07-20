@@ -64,6 +64,7 @@ func (h *HttpHandlerImpl) RegisterPath(e *echo.Echo) {
 	// Admin group
 	adminGroup := e.Group("admin")
 	{
+		adminGroup.GET("/user/list", h.admin.GetMember, auth.JwtVerifyAccess("admin"))
 		adminGroup.GET("/list", h.admin.Get, auth.JwtVerifyAccess("admin"))
 		adminGroup.GET("/:id", h.admin.Detail, auth.JwtVerifyAccess("admin"))
 		adminGroup.POST("/create", h.admin.Create)
