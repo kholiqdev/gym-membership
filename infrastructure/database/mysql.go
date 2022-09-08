@@ -9,8 +9,8 @@ import (
 	_adminEntity "gym/cmd/domain/admin/entity"
 	_classEntity "gym/cmd/domain/class/entity"
 	_classBookingEntity "gym/cmd/domain/class_booking/entity"
+	_trainerEntity "gym/cmd/domain/class_category/entity"
 	_memberEntity "gym/cmd/domain/member/entity"
-	_trainerEntity "gym/cmd/domain/trainer/entity"
 	"gym/config"
 )
 
@@ -107,8 +107,8 @@ func initMigrate(db *gorm.DB) {
 		&_adminEntity.Admin{},
 		&_memberEntity.Member{},
 		&_memberEntity.MemberType{},
-		&_memberEntity.MemberOrder{},
-		&_trainerEntity.Trainer{},
+		&_memberEntity.MemberJoin{},
+		&_trainerEntity.ClassCategory{},
 		&_classEntity.Class{},
 		&_classBookingEntity.ClassBooking{},
 		&_classBookingEntity.ClassBookingDetail{},

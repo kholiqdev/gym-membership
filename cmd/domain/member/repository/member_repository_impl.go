@@ -2,6 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"gym/cmd/domain/member/entity"
 )
 
@@ -13,7 +14,7 @@ type MemberRepositoryImpl struct {
 func (r *MemberRepositoryImpl) FindAll() (*entity.MemberList, error) {
 	var members entity.MemberList
 
-	if e := r.Db.Debug().Find(&members).Error; e != nil {
+	if e := r.Db.Debug().Preload("MemberOrder").Preload(clause.Associations).Find(&members).Error; e != nil {
 		return nil, e
 	}
 
@@ -27,12 +28,17 @@ func (r *MemberRepositoryImpl) Find(memberId uint) (*entity.Member, error) {
 		return nil, e
 	}
 
-	return &entity.Member{
-		ID:       member.ID,
-		Name:     member.Name,
-		Email:    member.Email,
-		Password: member.Password,
-	}, nil
+	return &member, nil
+}
+
+func (r *MemberRepositoryImpl) FindMemberTypeById(memberTypeId uint) (*entity.MemberType, error) {
+	var memberType entity.MemberType
+
+	if e := r.Db.Debug().First(&memberType, memberTypeId).Error; e != nil {
+		return nil, e
+	}
+
+	return &memberType, nil
 }
 
 func (r *MemberRepositoryImpl) FindByEmail(email string) (*entity.Member, error) {
@@ -42,12 +48,7 @@ func (r *MemberRepositoryImpl) FindByEmail(email string) (*entity.Member, error)
 		return nil, e
 	}
 
-	return &entity.Member{
-		ID:       member.ID,
-		Name:     member.Name,
-		Email:    member.Email,
-		Password: member.Password,
-	}, nil
+	return &member, nil
 }
 
 func (r *MemberRepositoryImpl) Insert(member *entity.Member) (*entity.Member, error) {
@@ -57,9 +58,16 @@ func (r *MemberRepositoryImpl) Insert(member *entity.Member) (*entity.Member, er
 	return member, nil
 }
 
-func (r *MemberRepositoryImpl) InsertMemberType(member *entity.MemberType) (*entity.MemberType, error) {
-	if e := r.Db.Debug().Create(&member).Error; e != nil {
+func (r *MemberRepositoryImpl) InsertMemberType(memberType *entity.MemberType) (*entity.MemberType, error) {
+	if e := r.Db.Debug().Create(&memberType).Error; e != nil {
 		return nil, e
 	}
-	return member, nil
+	return memberType, nil
+}
+
+func (r *MemberRepositoryImpl) InsertMemberJoin(memberJoin *entity.MemberJoin) (*entity.MemberJoin, error) {
+	if e := r.Db.Debug().Create(&memberJoin).Error; e != nil {
+		return nil, e
+	}
+	return memberJoin, nil
 }

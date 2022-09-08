@@ -1,7 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"github.com/golang-jwt/jwt"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/random"
 	"github.com/rs/zerolog/log"
 	"gym/cmd/domain/member/dto"
 	"gym/cmd/domain/member/entity"
@@ -9,6 +12,7 @@ import (
 	"gym/internal/protocol/http/errors"
 	"gym/pkg/auth"
 	"gym/pkg/hash"
+	"strings"
 	"time"
 )
 
@@ -45,10 +49,9 @@ func (s MemberServiceImpl) Store(request *dto.MemberCreateRequest) (*dto.MemberR
 	}
 
 	memberRepo, err := s.RepoMember.Insert(&entity.Member{
-		Name:         request.Name,
-		MemberTypeID: 1,
-		Email:        request.Email,
-		Password:     passwordHashed,
+		Name:     request.Name,
+		Email:    request.Email,
+		Password: passwordHashed,
 	})
 
 	if err != nil {
@@ -59,6 +62,66 @@ func (s MemberServiceImpl) Store(request *dto.MemberCreateRequest) (*dto.MemberR
 	memberResp := dto.CreateMemberResponse(memberRepo)
 	log.Info().Msg("Successfully insert to to DB")
 	return &memberResp, nil
+}
+
+func (s MemberServiceImpl) StoreMemberType(request *dto.MemberTypeCreateRequest) (*dto.MemberTypeResponse, error) {
+
+	memberRepo, err := s.RepoMember.InsertMemberType(&entity.MemberType{
+		Name:        request.Name,
+		Description: request.Description,
+		Image:       request.Image,
+		Duration:    request.Duration,
+		Price:       request.Price,
+	})
+
+	if err != nil {
+		log.Err(err).Msg("Error insert member type to DB")
+		return nil, err
+	}
+
+	adminResp := dto.CreateMemberTypeResponse(memberRepo)
+	log.Info().Msg("Successfully insert to to DB")
+	return &adminResp, nil
+}
+
+func (s MemberServiceImpl) StoreMemberJoin(ctx echo.Context, request *dto.MemberJoinRequest) (*dto.MemberJoinResponse, error) {
+	memberId := ctx.Get("user_id").(float64)
+	memberType, err := s.RepoMember.FindMemberTypeById(uint(memberId))
+	if err != nil {
+		log.Err(err).Msg("member type not found")
+		return nil, err
+	}
+
+	invoiceNo := fmt.Sprintf("INV-%s", strings.ToUpper(random.String(16)))
+	memberJoin, err := s.RepoMember.InsertMemberJoin(&entity.MemberJoin{
+		MemberTypeID:       request.MemberType,
+		MemberID:           uint(memberId),
+		InvoiceNo:          invoiceNo,
+		StartAt:            request.StartAt,
+		MemberName:         request.Name,
+		MemberNik:          request.Nik,
+		MemberPhone:        request.Phone,
+		MemberEmail:        request.Email,
+		MemberAddress:      request.Address,
+		MemberCity:         request.City,
+		MemberPostalCode:   request.PostalCode,
+		MemberTypeName:     memberType.Name,
+		MemberTypeDuration: memberType.Duration,
+		MemberTypeImage:    memberType.Image,
+		MemberTypePrice:    memberType.Price,
+		PaymentMethod:      "BCA",
+		Status:             1,
+		Total:              memberType.Price,
+	})
+
+	if err != nil {
+		log.Err(err).Msg("Error insert member type to DB")
+		return nil, err
+	}
+
+	memberJoinResp := dto.CreateMemberJoinResponse(memberJoin)
+	log.Info().Msg("Successfully insert to to DB")
+	return &memberJoinResp, nil
 }
 
 func (s MemberServiceImpl) Login(request *dto.MemberLoginRequest) (*dto.MemberAuthResponse, error) {
@@ -82,7 +145,7 @@ func (s MemberServiceImpl) Login(request *dto.MemberLoginRequest) (*dto.MemberAu
 		"exp":  time.Now().Add(time.Hour * 2).Unix(),
 	})
 
-	authResp := dto.CreateMemberAuthResponse(accessToken)
+	authResp := dto.CreateMemberAuthResponse(accessToken, member)
 
 	return &authResp, nil
 }
@@ -101,7 +164,7 @@ func (s MemberServiceImpl) Refresh(memberId uint) (*dto.MemberAuthResponse, erro
 		"exp":  time.Now().Add(time.Hour * 2).Unix(),
 	})
 
-	authResp := dto.CreateMemberAuthResponse(accessToken)
+	authResp := dto.CreateMemberAuthResponse(accessToken, member)
 
 	return &authResp, nil
 }
